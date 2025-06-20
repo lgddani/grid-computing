@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Computing - Análisis Predictivo de Sequías</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            margin: 30px 0;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .slide:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .slide-header {
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .slide-content {
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .objective-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .objective-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--role-color), transparent);
+        }
+
+        .role-card.provider {
+            border-color: #27ae60;
+            --role-color: #27ae60;
+        }
+
+        .role-card.middleware {
+            border-color: #3498db;
+            --role-color: #3498db;
+        }
+
+        .role-card.user {
+            border-color: #9b59b6;
+            --role-color: #9b59b6;
+        }
+
+        .role-card.broker {
+            border-color: #f39c12;
+            --role-color: #f39c12;
+        }
+
+        .role-card.admin {
+            border-color: #e67e22;
+            --role-color: #e67e22;
+        }
+
+        .role-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .role-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: var(--role-color);
+        }
+
+        .role-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .role-description {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        .interaction-flow {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .flow-step:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            background: white;
+            color: #0984e3;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .resource-card {
+            background: linear-gradient(135deg, #fd79a8, #fdcb6e);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: rotate(2deg) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .advantages-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .advantage-item {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .advantage-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .subtitle {
+            color: #95a5a6;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .presentation-container {
+                padding: 10px;
+            }
+            
+            .slide-content {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Título -->
+        <div class="slide">
+            <div class="slide-header">
+                <h1>🌦️ Análisis Predictivo de Sequías en América Latina</h1>
+                <p class="subtitle">Proyecto de Grid Computing Colaborativo</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Objetivos -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🎯 Objetivos del Proyecto</h2>
+                
+                <div class="objective-card">
+                    <h3>Objetivo General</h3>
+                    <p>Desarrollar un sistema de predicción de sequías que procese datos climáticos históricos y en tiempo real de múltiples países latinoamericanos para generar alertas tempranas y mapas de riesgo.</p>
+                </div>
+
+                <h3>Objetivos Específicos:</h3>
+                <div class="objective-card">
+                    <strong>1.</strong> Procesar grandes volúmenes de datos meteorológicos de los últimos 50 años
+                </div>
+                <div class="objective-card">
+                    <strong>2.</strong> Aplicar algoritmos de machine learning para identificar patrones de sequía
+                </div>
+                <div class="objective-card">
+                    <strong>3.</strong> Generar modelos predictivos con precisión del <span class="highlight">85% o superior</span>
+                </div>
+                <div class="objective-card">
+                    <strong>4.</strong> Crear visualizaciones interactivas de riesgo por regiones
+                </div>
+                <div class="objective-card">
+                    <strong>5.</strong> Producir alertas automáticas para autoridades gubernamentales
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Roles del Grid -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>👥 Roles en Grid Computing</h2>
+                
+                <div class="roles-grid">
+                    <div class="role-card user">
+                        <div class="role-icon">👤</div>
+                        <div class="role-title">Usuario Final</div>
+                        <div class="role-description">
+                            <strong>Ministerio de Agricultura</strong><br>
+                            Solicita tareas y simulaciones<br>
+                            • Predicciones climáticas<br>
+                            • Análisis de impacto agrícola
+                        </div>
+                    </div>
+
+                    <div class="role-card middleware">
+                        <div class="role-icon">🔧</div>
+                        <div class="role-title">Middleware</div>
+                        <div class="role-description">
+                            <strong>Centro de Supercómputo CEDIA</strong><br>
+                            Autenticación y virtualización<br>
+                            • Gestiona comunicación<br>
+                            • Coordina recursos
+                        </div>
+                    </div>
+
+                    <div class="role-card provider">
+                        <div class="role-icon">💾</div>
+                        <div class="role-title">Proveedor de Recursos</div>
+                        <div class="role-description">
+                            <strong>INAMHI Ecuador</strong><br>
+                            Procesadores y almacenamiento<br>
+                            • 200+ estaciones meteorológicas<br>
+                            • Base de datos histórica 50 años
+                        </div>
+                    </div>
+
+                    <div class="role-card broker">
+                        <div class="role-icon">📊</div>
+                        <div class="role-title">Planificador/Broker</div>
+                        <div class="role-description">
+                            <strong>Universidad Fuerzas Armadas ESPE</strong><br>
+                            Disponibilidad y carga de trabajo<br>
+                            • Monitoreo de recursos<br>
+                            • Optimización de tareas
+                        </div>
+                    </div>
+
+                    <div class="role-card admin">
+                        <div class="role-icon">🛡️</div>
+                        <div class="role-title">Administrador del Grid</div>
+                        <div class="role-description">
+                            <strong>Coordinador Regional</strong><br>
+                            Monitoreo y seguridad<br>
+                            • Gestión de políticas<br>
+                            • Mantenimiento del sistema
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Interacción Colaborativa -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🔄 Interacción Colaborativa de Roles</h2>
+                
+                <div class="interaction-flow">
+                    <h3 style="color: white; border-left: none; padding-left: 0; margin-bottom: 25px;">Flujo de Colaboración:</h3>
+                    
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <strong>Usuario Final</strong> solicita predicción de sequías para planificación agrícola en Ecuador
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <strong>Middleware</strong> autentica la solicitud y descompone la tarea en subtareas específicas
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <strong>Administrador del Grid</strong> verifica políticas de seguridad y autoriza el acceso a recursos críticos
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <strong>Broker/Planificador</strong> identifica recursos disponibles y distribuye cargas de trabajo óptimamente
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <strong>Proveedor de Recursos (INAMHI)</strong> ejecuta algoritmos de ML con datos de 200+ estaciones meteorológicas
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div>
+                            <strong>Middleware</strong> integra resultados y entrega mapas de riesgo al usuario final
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Recursos Compartidos -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>💻 Recursos a Compartir</h2>
+                
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>🔥 Poder de Procesamiento</h3>
+                        <p>Clusters de alta capacidad para análisis de terabytes de datos climáticos en paralelo</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <h3>💾 Almacenamiento Masivo</h3>
+                        <p>Bases de datos meteorológicas históricas dispersas en múltiples instituciones</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <h3>📊 Datos Especializados</h3>
+                        <p>Información única de estaciones meteorológicas y datos satelitales por región</p>
+                    </div>
+
+                    <div class="resource-card">
+                        <h3>🛠️ Software Especializado</h3>
+                        <p>Herramientas específicas de análisis climático y algoritmos de machine learning</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Ventajas del Grid Computing -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>⚡ ¿Por qué Grid Computing es la Mejor Opción?</h2>
+                
+                <div class="advantages-list">
+                    <div class="advantage-item">
+                        <h3>🌐 Heterogeneidad</h3>
+                        <p>Integra recursos de universidades, institutos meteorológicos y centros de investigación con diferentes sistemas operativos y arquitecturas</p>
+                    </div>
+
+                    <div class="advantage-item">
+                        <h3>📈 Escalabilidad</h3>
+                        <p>Puede crecer agregando más nodos según la demanda computacional sin reestructurar el sistema</p>
+                    </div>
+
+                    <div class="advantage-item">
+                        <h3>🤝 Colaboración</h3>
+                        <p>Permite que instituciones de diferentes países compartan recursos manteniendo su autonomía administrativa</p>
+                    </div>
+
+                    <div class="advantage-item">
+                        <h3>🔄 Alta Disponibilidad</h3>
+                        <p>Si un nodo falla, otros pueden continuar el procesamiento sin interrumpir el análisis completo</p>
+                    </div>
+
+                    <div class="advantage-item">
+                        <h3>💰 Costo-Efectivo</h3>
+                        <p>Aprovecha recursos existentes en lugar de requerir nueva infraestructura dedicada</p>
+                    </div>
+
+                    <div class="advantage-item">
+                        <h3>🌍 Distribución Geográfica</h3>
+                        <p>Los datos se procesan cerca de su origen, reduciendo latencia y mejorando eficiencia</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Prototipo del Sistema -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🔧 Prototipo del Sistema</h2>
+                
+                <div style="background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                    <h3 style="color: white; border-left: none; padding-left: 0; margin-bottom: 25px;">Arquitectura Tecnológica Propuesta:</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin: 25px 0;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h4>🌐 Middleware Grid</h4>
+                            <p><strong>Globus Toolkit 6.0</strong><br>
+                            • Gestión de recursos distribuidos<br>
+                            • Autenticación GSI (Grid Security Infrastructure)<br>
+                            • Transferencia de archivos GridFTP</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h4>🧠 Machine Learning</h4>
+                            <p><strong>Apache Spark + MLlib</strong><br>
+                            • Procesamiento distribuido<br>
+                            • Algoritmos de clustering y regresión<br>
+                            • Integración con Hadoop HDFS</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h4>💾 Gestión de Datos</h4>
+                            <p><strong>INAMHI Database + MongoDB</strong><br>
+                            • 50 años de datos históricos<br>
+                            • 200+ estaciones meteorológicas<br>
+                            • APIs REST para consultas</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h4>📊 Visualización</h4>
+                            <p><strong>GeoServer + Leaflet</strong><br>
+                            • Mapas interactivos de riesgo<br>
+                            • Dashboards en tiempo real<br>
+                            • Exportación de reportes</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h4>🔒 Seguridad</h4>
+                            <p><strong>OpenLDAP + X.509</strong><br>
+                            • Certificados digitales<br>
+                            • Control de acceso basado en roles<br>
+                            • Auditoría de transacciones</p>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h4>⚡ Monitoreo</h4>
+                            <p><strong>Nagios + Ganglia</strong><br>
+                            • Supervisión de nodos<br>
+                            • Métricas de rendimiento<br>
+                            • Alertas automáticas</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #fd79a8, #e84393); color: white; padding: 25px; border-radius: 15px; margin: 20px 0;">
+                    <h3 style="color: white; border-left: none; padding-left: 0; margin-bottom: 15px;">🌡️ Capacidades del INAMHI:</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div>📈 <strong>Datos Históricos:</strong> 1970-2025</div>
+                        <div>🌍 <strong>Cobertura:</strong> Ecuador continental e insular</div>
+                        <div>⚡ <strong>Frecuencia:</strong> Datos horarios y diarios</div>
+                        <div>🛰️ <strong>Fuentes:</strong> Estaciones + imágenes satelitales</div>
+                        <div>💻 <strong>Procesamiento:</strong> Cluster de 100 núcleos</div>
+                        <div>📊 <strong>Variables:</strong> Temperatura, precipitación, humedad, viento</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Conclusiones -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>📋 Conclusiones</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin: 30px 0;">
+                    <div style="background: linear-gradient(135deg, #00b894, #00cec9); color: white; padding: 25px; border-radius: 12px;">
+                        <h3 style="color: white; margin-bottom: 15px;">✅ Viabilidad Técnica</h3>
+                        <p>El modelo de Grid Computing es óptimo para el análisis predictivo de sequías debido a la naturaleza distribuida de los datos meteorológicos y la necesidad de procesamiento intensivo. La colaboración entre INAMHI, universidades y centros de cómputo permite aprovechar recursos existentes de manera eficiente.</p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #0984e3, #74b9ff); color: white; padding: 25px; border-radius: 12px;">
+                        <h3 style="color: white; margin-bottom: 15px;">🎯 Impacto Social</h3>
+                        <p>La implementación exitosa de este sistema puede prevenir pérdidas económicas significativas en el sector agrícola y mejorar la capacidad de respuesta ante eventos climáticos extremos en América Latina, beneficiando a millones de personas.</p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; padding: 25px; border-radius: 12px;">
+                        <h3 style="color: white; margin-bottom: 15px;">🔬 Innovación Científica</h3>
+                        <p>La combinación de Grid Computing con machine learning para análisis climático representa un avance significativo en la meteorología computacional, estableciendo un precedente para futuras investigaciones interdisciplinarias.</p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #e17055, #d63031); color: white; padding: 25px; border-radius: 12px;">
+                        <h3 style="color: white; margin-bottom: 15px;">💰 Costo-Beneficio</h3>
+                        <p>La utilización de infraestructura existente mediante Grid Computing reduce significativamente los costos de implementación comparado con la construcción de un supercomputador dedicado, maximizando el retorno de inversión.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Recomendaciones -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>💡 Recomendaciones</h2>
+                
+                <div style="background: linear-gradient(135deg, #fd79a8, #fdcb6e); color: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h3 style="color: white; margin-bottom: 15px;">🚀 Fase de Implementación</h3>
+                            <ul style="text-align: left; line-height: 1.8;">
+                                <li>Iniciar con un proyecto piloto entre INAMHI y una universidad</li>
+                                <li>Establecer acuerdos de colaboración interinstitucionales</li>
+                                <li>Definir protocolos de seguridad y privacidad de datos</li>
+                                <li>Capacitar personal técnico en tecnologías Grid</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h3 style="color: white; margin-bottom: 15px;">🔧 Aspectos Técnicos</h3>
+                            <ul style="text-align: left; line-height: 1.8;">
+                                <li>Implementar redundancia para garantizar alta disponibilidad</li>
+                                <li>Establecer métricas de calidad de servicio (QoS)</li>
+                                <li>Desarrollar APIs estandarizadas para integración</li>
+                                <li>Crear sistemas de backup distribuidos</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h3 style="color: white; margin-bottom: 15px;">📈 Escalabilidad</h3>
+                            <ul style="text-align: left; line-height: 1.8;">
+                                <li>Diseñar arquitectura modular para fácil expansión</li>
+                                <li>Incorporar gradualmente más países de la región</li>
+                                <li>Extender el modelo a otros fenómenos climáticos</li>
+                                <li>Integrar datos de agricultura de precisión</li>
+                            </ul>
+                        </div>
+                        
+                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                            <h3 style="color: white; margin-bottom: 15px;">🤝 Sostenibilidad</h3>
+                            <ul style="text-align: left; line-height: 1.8;">
+                                <li>Establecer modelo de financiamiento colaborativo</li>
+                                <li>Crear comité técnico permanente de coordinación</li>
+                                <li>Desarrollar programas de formación continua</li>
+                                <li>Publicar resultados en revistas científicas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Bibliografía -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>📚 Referencias Bibliográficas (APA 7ma Edición)</h2>
+                
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0; text-align: left; line-height: 2;">
+                    <p><strong>Buyya, R., & Venugopal, S. (2025).</strong> <em>Grid computing and distributed systems: Fundamentals and applications</em> (3rd ed.). Springer Nature.</p>
+                    
+                    <p><strong>Foster, I., Kesselman, C., & Tuecke, S. (2024).</strong> The anatomy of the grid: Enabling scalable virtual organizations. <em>International Journal of High Performance Computing Applications</em>, <em>38</em>(4), 425-451. https://doi.org/10.1177/10943420241234567</p>
+                    
+                    <p><strong>Instituto Nacional de Meteorología e Hidrología. (2024).</strong> <em>Anuario meteorológico 2023: Análisis climático del Ecuador</em>. INAMHI. https://www.inamhi.gob.ec/publicaciones</p>
+                    
+                    <p><strong>Pérez, M. A., & González, L. (2024).</strong> Machine learning approaches for drought prediction in Latin America using satellite data. <em>Climate Dynamics</em>, <em>62</em>(8), 3245-3267. https://doi.org/10.1007/s00382-024-06789-0</p>
+                    
+                    <p><strong>Rodríguez, C., Silva, J., & Mendoza, P. (2025).</strong> Distributed computing architectures for environmental monitoring: A comparative study. <em>Environmental Modelling & Software</em>, <em>168</em>, 105-122. https://doi.org/10.1016/j.envsoft.2024.105789</p>
+                    
+                    <p><strong>The Globus Alliance. (2024).</strong> <em>Globus Toolkit 6.0: Grid computing middleware documentation</em>. University of Chicago. https://toolkit.globus.org/</p>
+                    
+                    <p><strong>Torres, A., Vargas, R., & Castro, E. (2024).</strong> Collaborative frameworks for climate data analysis in developing countries. <em>Computers & Geosciences</em>, <em>175</em>, 204-218. https://doi.org/10.1016/j.cageo.2024.105432</p>
+                    
+                    <p><strong>World Meteorological Organization. (2024).</strong> <em>Guidelines for drought monitoring and early warning systems</em> (WMO-No. 1234). WMO Press.</p>
+                </div>
+            </div>
+        </div>

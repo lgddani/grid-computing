@@ -451,29 +451,90 @@
         <!-- Slide 5: Recursos Compartidos -->
         <div class="slide">
             <div class="slide-content">
-                <h2>💻 Recursos a Compartir</h2>
-                
-                <div class="resources-grid">
-                    <div class="resource-card">
-                        <h3>🔥 Poder de Procesamiento</h3>
-                        <p>Clusters de alta capacidad para análisis de terabytes de datos climáticos en paralelo</p>
+                <h2 style="font-size:2.2em; color:#222; letter-spacing:-1px; margin-bottom: 30px; font-weight:700;">Recursos a Compartir</h2>
+                <div class="resources-minimal-grid">
+                    <div class="resource-minimal-card">
+                        <div class="resource-icon">
+                            <svg width="40" height="40" fill="none" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#6C63FF" stroke-width="2"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#6C63FF" stroke-width="2"/><rect x="7" y="17" width="10" height="4" rx="2" stroke="#6C63FF" stroke-width="2"/></svg>
+                        </div>
+                        <div class="resource-title">Procesamiento</div>
+                        <div class="resource-desc">Clusters distribuidos para análisis de datos climáticos a gran escala.</div>
                     </div>
-
-                    <div class="resource-card">
-                        <h3>💾 Almacenamiento Masivo</h3>
-                        <p>Bases de datos meteorológicas históricas dispersas en múltiples instituciones</p>
+                    <div class="resource-minimal-card">
+                        <div class="resource-icon">
+                            <svg width="40" height="40" fill="none" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3" stroke="#00B894" stroke-width="2"/><path d="M7 9h10M7 13h6" stroke="#00B894" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="resource-title">Almacenamiento</div>
+                        <div class="resource-desc">Bases de datos históricas y almacenamiento seguro de información meteorológica.</div>
                     </div>
-
-                    <div class="resource-card">
-                        <h3>📊 Datos Especializados</h3>
-                        <p>Información única de estaciones meteorológicas y datos satelitales por región</p>
+                    <div class="resource-minimal-card">
+                        <div class="resource-icon">
+                            <svg width="40" height="40" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="#00B8D9" stroke-width="2"/><path d="M12 7v5l3 3" stroke="#00B8D9" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="resource-title">Datos Especializados</div>
+                        <div class="resource-desc">Información de estaciones meteorológicas y satélites regionales.</div>
                     </div>
-
-                    <div class="resource-card">
-                        <h3>🛠️ Software Especializado</h3>
-                        <p>Herramientas específicas de análisis climático y algoritmos de machine learning</p>
+                    <div class="resource-minimal-card">
+                        <div class="resource-icon">
+                            <svg width="40" height="40" fill="none" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" stroke="#FF7675" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#FF7675" stroke-width="2" stroke-linecap="round"/></svg>
+                        </div>
+                        <div class="resource-title">Software</div>
+                        <div class="resource-desc">Herramientas de análisis climático y machine learning de última generación.</div>
                     </div>
                 </div>
+                <style>
+                    .resources-minimal-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                        gap: 32px;
+                        margin: 40px 0 0 0;
+                    }
+                    .resource-minimal-card {
+                        background: #fff;
+                        border-radius: 18px;
+                        box-shadow: 0 4px 24px rgba(60,60,60,0.07);
+                        padding: 36px 24px 28px 24px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        transition: box-shadow 0.2s, transform 0.2s;
+                        border: 1.5px solid #f0f0f0;
+                        min-height: 260px;
+                    }
+                    .resource-minimal-card:hover {
+                        box-shadow: 0 8px 32px rgba(60,60,60,0.13);
+                        transform: translateY(-6px) scale(1.025);
+                        border-color: #e0e0e0;
+                    }
+                    .resource-icon {
+                        margin-bottom: 18px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .resource-title {
+                        font-size: 1.18em;
+                        font-weight: 600;
+                        color: #222;
+                        margin-bottom: 10px;
+                        letter-spacing: -0.5px;
+                    }
+                    .resource-desc {
+                        color: #666;
+                        font-size: 1em;
+                        text-align: center;
+                        line-height: 1.6;
+                        font-weight: 400;
+                    }
+                    @media (max-width: 600px) {
+                        .resources-minimal-grid {
+                            grid-template-columns: 1fr;
+                        }
+                        .resource-minimal-card {
+                            padding: 28px 12px 20px 12px;
+                        }
+                    }
+                </style>
             </div>
         </div>
 
@@ -621,51 +682,117 @@
         <!-- Slide 9: Recomendaciones -->
         <div class="slide">
             <div class="slide-content">
-                <h2>💡 Recomendaciones</h2>
-                
-                <div style="background: linear-gradient(135deg, #fd79a8, #fdcb6e); color: white; padding: 30px; border-radius: 15px; margin: 30px 0;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <h3 style="color: white; margin-bottom: 15px;">🚀 Fase de Implementación</h3>
-                            <ul style="text-align: left; line-height: 1.8;">
-                                <li>Iniciar con un proyecto piloto entre INAMHI y una universidad</li>
-                                <li>Establecer acuerdos de colaboración interinstitucionales</li>
-                                <li>Definir protocolos de seguridad y privacidad de datos</li>
-                                <li>Capacitar personal técnico en tecnologías Grid</li>
-                            </ul>
+                <h2 style="font-size:2.2em; color:#222; letter-spacing:-1px; margin-bottom: 30px; font-weight:700;">Recomendaciones</h2>
+                <div class="recommendations-minimal-grid">
+                    <div class="recommendation-minimal-card" style="--accent:#6C63FF;">
+                        <div class="recommendation-icon">
+                            <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#6C63FF" stroke-width="2"/><path d="M12 8v4l3 3" stroke="#6C63FF" stroke-width="2" stroke-linecap="round"/></svg>
                         </div>
-                        
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <h3 style="color: white; margin-bottom: 15px;">🔧 Aspectos Técnicos</h3>
-                            <ul style="text-align: left; line-height: 1.8;">
-                                <li>Implementar redundancia para garantizar alta disponibilidad</li>
-                                <li>Establecer métricas de calidad de servicio (QoS)</li>
-                                <li>Desarrollar APIs estandarizadas para integración</li>
-                                <li>Crear sistemas de backup distribuidos</li>
-                            </ul>
+                        <div class="recommendation-title">Fase de Implementación</div>
+                        <ul class="recommendation-list">
+                            <li>Piloto entre INAMHI y universidad</li>
+                            <li>Acuerdos de colaboración</li>
+                            <li>Protocolos de seguridad y privacidad</li>
+                            <li>Capacitación técnica en Grid</li>
+                        </ul>
+                    </div>
+                    <div class="recommendation-minimal-card" style="--accent:#00B894;">
+                        <div class="recommendation-icon">
+                            <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4" stroke="#00B894" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#00B894" stroke-width="2" stroke-linecap="round"/></svg>
                         </div>
-                        
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <h3 style="color: white; margin-bottom: 15px;">📈 Escalabilidad</h3>
-                            <ul style="text-align: left; line-height: 1.8;">
-                                <li>Diseñar arquitectura modular para fácil expansión</li>
-                                <li>Incorporar gradualmente más países de la región</li>
-                                <li>Extender el modelo a otros fenómenos climáticos</li>
-                                <li>Integrar datos de agricultura de precisión</li>
-                            </ul>
+                        <div class="recommendation-title">Aspectos Técnicos</div>
+                        <ul class="recommendation-list">
+                            <li>Redundancia para alta disponibilidad</li>
+                            <li>Métricas de calidad de servicio</li>
+                            <li>APIs estandarizadas</li>
+                            <li>Backups distribuidos</li>
+                        </ul>
+                    </div>
+                    <div class="recommendation-minimal-card" style="--accent:#00B8D9;">
+                        <div class="recommendation-icon">
+                            <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="10" rx="3" stroke="#00B8D9" stroke-width="2"/><rect x="7" y="3" width="10" height="4" rx="2" stroke="#00B8D9" stroke-width="2"/><rect x="7" y="17" width="10" height="4" rx="2" stroke="#00B8D9" stroke-width="2"/></svg>
                         </div>
-                        
-                        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
-                            <h3 style="color: white; margin-bottom: 15px;">🤝 Sostenibilidad</h3>
-                            <ul style="text-align: left; line-height: 1.8;">
-                                <li>Establecer modelo de financiamiento colaborativo</li>
-                                <li>Crear comité técnico permanente de coordinación</li>
-                                <li>Desarrollar programas de formación continua</li>
-                                <li>Publicar resultados en revistas científicas</li>
-                            </ul>
+                        <div class="recommendation-title">Escalabilidad</div>
+                        <ul class="recommendation-list">
+                            <li>Arquitectura modular y expansible</li>
+                            <li>Incorporar más países</li>
+                            <li>Extender a otros fenómenos climáticos</li>
+                            <li>Integrar agricultura de precisión</li>
+                        </ul>
+                    </div>
+                    <div class="recommendation-minimal-card" style="--accent:#FF7675;">
+                        <div class="recommendation-icon">
+                            <svg width="36" height="36" fill="none" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20" stroke="#FF7675" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="10" stroke="#FF7675" stroke-width="2"/></svg>
                         </div>
+                        <div class="recommendation-title">Sostenibilidad</div>
+                        <ul class="recommendation-list">
+                            <li>Financiamiento colaborativo</li>
+                            <li>Comité técnico permanente</li>
+                            <li>Formación continua</li>
+                            <li>Publicar resultados científicos</li>
+                        </ul>
                     </div>
                 </div>
+                <style>
+                    .recommendations-minimal-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                        gap: 32px;
+                        margin: 40px 0 0 0;
+                    }
+                    .recommendation-minimal-card {
+                        background: #fff;
+                        border-radius: 18px;
+                        box-shadow: 0 4px 24px rgba(60,60,60,0.07);
+                        padding: 32px 20px 24px 20px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        border: 1.5px solid #f0f0f0;
+                        min-height: 260px;
+                        transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+                        border-top: 4px solid var(--accent);
+                    }
+                    .recommendation-minimal-card:hover {
+                        box-shadow: 0 8px 32px rgba(60,60,60,0.13);
+                        transform: translateY(-6px) scale(1.025);
+                        border-color: var(--accent);
+                    }
+                    .recommendation-icon {
+                        margin-bottom: 16px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .recommendation-title {
+                        font-size: 1.13em;
+                        font-weight: 600;
+                        color: #222;
+                        margin-bottom: 12px;
+                        letter-spacing: -0.5px;
+                        text-align: center;
+                    }
+                    .recommendation-list {
+                        color: #666;
+                        font-size: 1em;
+                        text-align: left;
+                        line-height: 1.7;
+                        font-weight: 400;
+                        padding-left: 18px;
+                        margin: 0;
+                    }
+                    .recommendation-list li {
+                        margin-bottom: 6px;
+                    }
+                    @media (max-width: 600px) {
+                        .recommendations-minimal-grid {
+                            grid-template-columns: 1fr;
+                        }
+                        .recommendation-minimal-card {
+                            padding: 24px 10px 16px 10px;
+                        }
+                    }
+                </style>
             </div>
         </div>
 
@@ -693,3 +820,6 @@
                 </div>
             </div>
         </div>
+    </div>
+</body>
+</html>
